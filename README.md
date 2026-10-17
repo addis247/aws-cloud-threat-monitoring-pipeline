@@ -2,51 +2,59 @@
 
 ## Project Overview
 
-This project demonstrates the design and implementation of an automated AWS security monitoring and alerting pipeline.
+This project demonstrates an AWS cloud security monitoring and alerting pipeline designed to detect, prioritize, and communicate high-severity security findings.
 
-The environment uses AWS identity, logging, threat-detection, event-routing, and notification services to identify high-severity security findings and notify a security analyst for investigation.
+The lab combines identity security, network segmentation, centralized audit logging, intelligent threat detection, event-driven filtering, analyst notification, and cost monitoring.
 
-The project was created as a hands-on cloud security portfolio lab and does not contain production, proprietary, or customer data.
+Amazon GuardDuty findings with severity values of 7 or higher are filtered through Amazon EventBridge and forwarded to an Amazon SNS topic for email notification. The resulting alert enables a security analyst to begin investigation and determine the appropriate response.
 
----
-
-## Project Objectives
-
-- Strengthen administrative access and identity security
-- Establish centralized AWS API activity logging
-- Detect suspicious cloud activity using Amazon GuardDuty
-- Filter high-severity findings using Amazon EventBridge
-- Route prioritized security alerts through Amazon SNS
-- Document a repeatable investigation and escalation workflow
-- Demonstrate cost-conscious cloud security implementation
+This project was created in a personal AWS lab for cybersecurity training and portfolio development.
 
 ---
 
 ## Architecture
 
 ```text
-AWS Account Activity
-        |
-        +--------------------+
-        |                    |
-        v                    v
-AWS CloudTrail        Amazon GuardDuty
-        |                    |
-        v                    v
-Amazon S3             Security Finding
-                             |
-                             v
-                    Amazon EventBridge
-                    Severity Filter >= 7
-                             |
-                             v
-                       Amazon SNS
-                             |
-                             v
-                  Security Analyst Email
+AWS Account and Resource Activity
+              |
+       +------+------+
+       |             |
+       v             v
+AWS CloudTrail   Amazon GuardDuty
+       |             |
+       v             v
+   Amazon S3    Security Finding
+                     |
+                     v
+              Amazon EventBridge
+              Severity Filter >= 7
+                     |
+                     v
+                 Amazon SNS
+                     |
+                     v
+          Security Analyst Email
+                     |
+                     v
+          Manual Investigation and
+             Response Decision
 ```
 
-**Important clarification:** CloudTrail sends audit logs to S3, while GuardDuty findings are published separately to EventBridge. The EventBridge rule does not scan the S3 bucket.
+CloudTrail delivers configured management-event logs to Amazon S3 for audit and investigation purposes. GuardDuty findings are published separately to EventBridge for filtering and routing.
+
+---
+
+## Project Objectives
+
+- Secure administrative access to the AWS lab account
+- Avoid using the AWS root account for routine activity
+- Establish a segmented virtual network
+- Record AWS management activity for audit and investigation
+- Enable continuous cloud threat detection
+- Prioritize high-severity GuardDuty findings
+- Deliver prioritized findings to an analyst through email
+- Document a repeatable investigation and escalation process
+- Monitor unexpected cloud-service charges
 
 ---
 
@@ -63,64 +71,93 @@ Amazon S3             Security Finding
 
 ---
 
-## Project Phases
+## Implementation Phases
 
-### 1. Identity and Perimeter Security
+### Phase 1: Identity and Account Security
 
-- Secured administrative access
-- Created a dedicated IAM identity for lab administration
-- Applied role-appropriate IAM permissions
-- Configured VPC and security-group controls
-- Established account budget monitoring
+- Enabled multi-factor authentication for the AWS root account
+- Avoided using the root account for routine administrative work
+- Created the `admin-dev` identity for lab administration
+- Used identity-based permissions for AWS service configuration
+- Created a $0.01 AWS Budget alert for early cost notification
 
-### 2. Threat Detection
+### Phase 2: Network Security
+
+- Created a custom VPC using the `10.0.0.0/16` CIDR range
+- Configured public and private subnets
+- Applied network security controls to regulate permitted traffic
+- Maintained the environment as an isolated educational lab
+
+### Phase 3: Audit Logging
+
+- Created the `cyber-lab-main-trail` CloudTrail trail
+- Configured multi-region management-event logging
+- Delivered audit logs to an Amazon S3 bucket
+- Centralized AWS management-event records for investigation and compliance support
+
+### Phase 4: Threat Detection
 
 - Enabled Amazon GuardDuty
-- Reviewed generated or sample security findings
-- Evaluated finding type, severity, affected resource, and recommended response
-- Documented the analyst investigation process
+- Enabled selected GuardDuty protection features
+- Reviewed generated security findings
+- Evaluated finding severity, affected resources, and recommended response actions
 
-### 3. Audit Logging
+### Phase 5: Event Filtering and Alerting
 
-- Enabled AWS CloudTrail management-event logging
-- Configured centralized log delivery to Amazon S3
-- Applied encryption and restricted access to stored audit logs
-- Used CloudTrail records to review account and administrative activity
+- Created the `cyber-lab-guardduty-high-severity` EventBridge rule
+- Used the default EventBridge event bus
+- Filtered GuardDuty findings with severity values of 7 or higher
+- Routed matching events to the `cyber-lab-alert-topic` SNS topic
+- Confirmed an email subscription for analyst notification
 
-### 4. Automated Alert Routing
+### Phase 6: Investigation and Response
 
-- Created an Amazon EventBridge rule for GuardDuty findings
-- Applied an event pattern for severity values of 7 or higher
-- Routed matching events to an Amazon SNS topic
-- Configured an email subscription for analyst notification
-- Tested and documented the alert-delivery process
+- Reviewed the GuardDuty finding details
+- Examined the finding type, severity, affected resource, and supporting evidence
+- Used available CloudTrail records to review relevant AWS activity
+- Documented the investigation and recommended response
+- Maintained human review before taking containment or remediation actions
 
 ---
 
 ## Security Controls Demonstrated
 
-- Administrative account protection
+- Root-account MFA
+- Separation of root and routine administrative activity
 - Identity and access management
-- Least-privilege access principles
-- Centralized audit logging
-- Encrypted log storage
-- Continuous threat detection
-- Severity-based event filtering
-- Automated security notification
-- Incident documentation and escalation
-- Cloud budget monitoring
+- Network segmentation
+- Management-event logging
+- Centralized audit-log storage
+- Continuous cloud threat detection
+- Severity-based alert prioritization
+- Event-driven security notification
+- Human review and investigation
+- Cost-monitoring alerts
 
 ---
 
-## Deliverables
+## Repository Contents
 
-- Architecture diagram
-- Sanitized EventBridge event pattern
-- Sanitized IAM policy
-- Cloud security control summary
-- Sample GuardDuty finding analysis
-- Incident-response workflow
-- Implementation screenshots
+### Documentation
+
+- Project overview
+- Security-control summary
+- Incident-investigation workflow
+
+### Configurations
+
+- Sanitized EventBridge event pattern for high-severity GuardDuty findings
+
+### Findings
+
+- Sanitized sample-finding analysis
+- Analyst investigation notes
+- Recommended response actions
+
+### Artifacts
+
+- AWS security-monitoring architecture diagram
+- Sanitized implementation screenshots
 
 ---
 
@@ -132,22 +169,42 @@ Amazon S3             Security Finding
 - Identity and Access Management
 - Audit Logging
 - Event-Driven Security Automation
-- Incident Investigation
 - Alert Prioritization
+- Incident Investigation
 - Security Documentation
+- Network Segmentation
 - Cost Governance
 
 ---
 
-## Security and Privacy Notice
+## Project Outcome
 
-All account IDs, resource identifiers, email addresses, bucket names, user names, access keys, and other sensitive values have been removed or replaced with placeholders.
+The completed pipeline demonstrated that a high-severity GuardDuty finding could be filtered through EventBridge and delivered to a confirmed SNS email subscription for analyst review.
 
-No production systems, real customer information, confidential data, or active credentials are included in this repository.
+The workflow automated detection filtering and notification while preserving human oversight for investigation, containment, and remediation decisions.
+
+---
+
+## Current Limitations
+
+- The pipeline provides automated alerting but does not perform automated containment or remediation.
+- Email is the only configured notification endpoint.
+- The lab does not represent a production multi-account AWS environment.
+- The project does not claim audit-log immutability unless integrity-validation or retention controls are separately verified.
+- AWS service charges may apply based on usage, enabled protection features, region, and trial status.
+- The $0.01 AWS Budget threshold provides notification but does not automatically stop resources or prevent charges.
+
+---
+
+## Security Notice
+
+All account IDs, email addresses, bucket names, ARNs, access keys, IP addresses, detector IDs, subscription IDs, and other account-specific values must be removed or replaced with placeholders before publication.
+
+No active credentials, production information, customer data, proprietary information, or confidential material are included in this repository.
 
 ---
 
 ## Portfolio Disclaimer
 
-This repository documents a personal educational lab created for cybersecurity training and professional portfolio development. The environment and results should not be interpreted as a production security implementation or evidence of a real-world cyberattack.
+This repository documents a personal educational lab created for cybersecurity training and professional portfolio development. It does not document a production deployment or a real-world cyberattack.
 
