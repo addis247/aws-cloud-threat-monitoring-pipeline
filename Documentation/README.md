@@ -1,10 +1,11 @@
-# Documentation
+# Project Documentation
 
-This folder contains project planning, security-control, and incident-response documentation.
+This folder contains the supporting documentation for the AWS Cloud Threat Monitoring and Alerting Pipeline.
 
-## Planned Files
+## Files
 
-- Project-Overview.md
-- Security-Controls.md
-- Incident-Response-Workflow.md
+- `Project-Overview.md`: Business purpose, technical scope, and project phases
+- `Security-Controls.md`: Security controls implemented in the lab
+- `Incident-Investigation-Workflow.md`: Analyst workflow following delivery of a security alert
+
 
