@@ -81,6 +81,9 @@ CloudTrail delivers configured management-event logs to Amazon S3 for audit and 
 - Used identity-based permissions for AWS service configuration
 - Created a $0.01 AWS Budget alert for early cost notification
 
+### IAM Permission Verification
+![IAM Policy Simulator Test](Artifacts/IAM%20Policy%20Simulator.png)
+
 ### Phase 2: Network Security
 
 - Created a custom VPC using the `10.0.0.0/16` CIDR range
@@ -102,13 +105,30 @@ CloudTrail delivers configured management-event logs to Amazon S3 for audit and 
 - Reviewed generated security findings
 - Evaluated finding severity, affected resources, and recommended response actions
 
+![EventBridge Rule Setup](Artifacts/01-eventbridge-rule-definition.jpg)
+
 ### Phase 5: Event Filtering and Alerting
 
 - Created the `cyber-lab-guardduty-high-severity` EventBridge rule
+#### Custom JSON Filtering Pattern
+![EventBridge JSON Filter](Artifacts/02-eventbridge-json-pattern-editor.jpg)
 - Used the default EventBridge event bus
 - Filtered GuardDuty findings with severity values of 7 or higher
 - Routed matching events to the `cyber-lab-alert-topic` SNS topic
+#### SNS Target & IAM Execution Role Binding
+![SNS Target Binding](Artifacts/04-eventbridge-sns-execution-role.jpg)
 - Confirmed an email subscription for analyst notification
+
+<details>
+<summary>🔍 Click to view additional EventBridge configuration screens</summary>
+
+### Target Selection Workflow
+![Target Selection](Artifacts/03-eventbridge-target-selection.jpg)
+
+### Final Review & Tags
+![Rule Review](Artifacts/05-eventbridge-tags-review.jpg)
+
+</details>
 
 ### Phase 6: Investigation and Response
 
